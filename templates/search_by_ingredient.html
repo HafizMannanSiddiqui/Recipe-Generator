@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search by Ingredient</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('home') }}">Recipe Manager</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                {% if 'user_id' in session %}
+                    <a class="nav-link" href="{{ url_for('add_recipe') }}">Add Recipe</a>
+                    <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                    {% if session.get('is_admin', False) %}
+                        <a class="nav-link" href="{{ url_for('admin_panel') }}">Admin</a>
+                    {% endif %}
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h1>Search Recipes by Ingredient</h1>
+        <form method="post" class="mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="ingredient_name" placeholder="Enter ingredient name..." required>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+        {% if recipes %}
+            <h2>Matching Recipes</h2>
+            <div class="row">
+                {% for recipe in recipes %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ recipe.image }}" class="card-img-top" alt="{{ recipe.name }}" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ recipe.name }}</h5>
+                            <p class="card-text">Type: {{ recipe.type }}</p>
+                            <a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}" class="btn btn-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">Back to Home</a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
