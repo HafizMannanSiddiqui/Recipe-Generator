@@ -184,7 +184,7 @@ def recipe_detail(recipe_id):
     conn = sqlite3.connect('recipes_final.db')
     recipe = pd.read_sql_query("SELECT * FROM recipe WHERE id = ?", conn, params=(recipe_id,))
     ingredients = pd.read_sql_query("""
-        SELECT i.name, ri.quantity_per_serving, ri.calories
+        SELECT i.name, i.unit, i.calories_per_unit, ri.quantity_per_serving, ri.calories
         FROM recipe_ingredient ri
         JOIN ingredient i ON ri.ingredient_id = i.id
         WHERE ri.recipe_id = ?
@@ -231,7 +231,7 @@ def edit_recipe_endpoint(recipe_id):
 @app.route('/ingredients')
 def ingredients_list():
     conn = sqlite3.connect('recipes_final.db')
-    ingredients = pd.read_sql_query("SELECT * FROM ingredient WHERE name LIKE ?", conn, params=(f'%{request.args.get("q", "")}%',))
+    ingredients = pd.read_sql_query("SELECT id, name, unit, calories_per_unit, description, image FROM ingredient WHERE name LIKE ?", conn, params=(f'%{request.args.get("q", "")}%',))
     conn.close()
     return render_template('ingredients.html', ingredients=ingredients.to_dict(orient='records'))
 
@@ -244,7 +244,7 @@ def add_ingredient_endpoint():
         conn = sqlite3.connect('recipes_final.db')
         c = conn.cursor()
         c.execute("INSERT INTO ingredient (name, unit, calories_per_unit, description, image) VALUES (?, ?, ?, ?, ?)",
-                  (request.form['name'], request.form['unit'], request.form['calories_per_unit'], request.form['description'], ''))
+                  (request.form['name'], request.form['unit'], request.form['calories_per_unit'], request.form['description'], request.form['image'] if 'image' in request.form else ''))
         conn.commit()
         conn.close()
         return redirect(url_for('ingredients'))
@@ -344,7 +344,7 @@ def api_recipes():
 def api_ingredients():
     search_query = request.args.get('q', '')
     conn = sqlite3.connect('recipes_final.db')
-    ingredients = pd.read_sql_query("SELECT id, name, unit, calories_per_unit, description FROM ingredient WHERE name LIKE ?", params=(f'%{search_query}%',))
+    ingredients = pd.read_sql_query("SELECT id, name, unit, calories_per_unit, description, image FROM ingredient WHERE name LIKE ?", params=(f'%{search_query}%',))
     conn.close()
     return jsonify(ingredients.to_dict(orient='records'))
 
