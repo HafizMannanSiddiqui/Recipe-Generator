@@ -1,0 +1,26 @@
+timestamp: 2025-06-10T20:49:01.285947
+CREATE TABLE "py4web_error"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "uuid" CHAR(512),
+    "app_name" CHAR(512),
+    "method" CHAR(512),
+    "path" CHAR(512),
+    "timestamp" TIMESTAMP,
+    "client_ip" CHAR(512),
+    "error" CHAR(512),
+    "snapshot" TEXT
+);
+success!
+timestamp: 2025-06-10T20:49:04.341690
+CREATE TABLE "auth_user"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "username" CHAR(512) UNIQUE,
+    "email" CHAR(512) UNIQUE,
+    "password" CHAR(512),
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "sso_id" CHAR(512),
+    "action_token" CHAR(512),
+    "last_password_change" TIMESTAMP
+);
+success!

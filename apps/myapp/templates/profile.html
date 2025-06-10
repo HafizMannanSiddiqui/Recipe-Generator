@@ -29,20 +29,20 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('home') }}">Recipe Manager</a>
+            <a class="navbar-brand" href="{{=URL('index')}}">Recipe Manager</a>
             <div class="navbar-nav">
-                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-                {% if 'user_id' in session %}
-                    <a class="nav-link" href="{{ url_for('add_recipe') }}">Add Recipe</a>
-                    <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
-                    {% if session.get('is_admin', False) %}
-                        <a class="nav-link" href="{{ url_for('admin_panel') }}">Admin</a>
+                <a class="nav-link" href="{{=URL('index')}}">Home</a>
+                {% if auth.user: %}
+                    <a class="nav-link" href="{{=URL('add_recipe')}}">Add Recipe</a>
+                    <a class="nav-link" href="{{=URL('profile')}}">Profile</a>
+                    {% if auth.user.get('is_admin', False): %}
+                        <a class="nav-link" href="{{=URL('admin_panel')}}">Admin</a>
                     {% endif %}
-                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                {% else %}
-                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                    <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-                {% endif %}
+                    <a class="nav-link" href="{{=URL('logout')}}">Logout</a>
+                {% else: %}
+                    <a class="nav-link" href="{{=URL('login')}}">Login</a>
+                    <a class="nav-link" href="{{=URL('register')}}">Register</a>
+                {% end %}
             </div>
         </div>
     </nav>
@@ -50,12 +50,12 @@
         <div class="profile-card">
             <h1 class="text-center mb-4">Profile</h1>
             <div class="mb-3">
-                <p class="mb-1"><strong>Username:</strong> {{ user.username }}</p>
-                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p class="mb-1"><strong>Username:</strong> {{=user.username}}</p>
+                <p><strong>Email:</strong> {{=user.email}}</p>
             </div>
             <div class="d-grid gap-2">
-                <a href="{{ url_for('edit_profile') }}" class="btn btn-primary btn-block">Edit Profile</a>
-                <a href="{{ url_for('home') }}" class="btn btn-secondary btn-block">Back to Home</a>
+                <a href="{{=URL('edit_profile')}}" class="btn btn-primary btn-block">Edit Profile</a>
+                <a href="{{=URL('index')}}" class="btn btn-secondary btn-block">Back to Home</a>
             </div>
         </div>
     </div>
